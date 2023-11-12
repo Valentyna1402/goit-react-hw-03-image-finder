@@ -1,42 +1,63 @@
-import React from 'react';
-import { Component } from 'react';
+import React, { Component } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+
 
 import { fetchImages } from './API';
 import { SearchBar } from './SearchBar/SearchBar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
+import { Button } from './Button/Button';
+import { Loader } from './Loader/Loader';
 
 export class App extends Component {
   state = {
     images: [],
-    loading: false,
     query: '',
     page: 1,
+    loading: false,
+    error: false,
   };
 
   async componentDidMount() {
+    const { query, page } = this.state;
     try {
-      const initialImages = await fetchImages();
+      this.setState({ loading: true, error: false,});
+      const initialImages = await fetchImages(query, page);
       this.setState({
         images: initialImages,
       });
-    } catch (error) {}
+    } catch (error) {
+      this.setState({
+        error: true,
+      });
+    } finally {
+      this.setState({ loading: false, });
+    }
   }
 
   async componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state;
     if (prevState.query !== query || prevState.page !== page) {
       try {
+        this.setState({ loading: true, error: false,});
         const searchedImages = await fetchImages(query, page);
-        this.setState({
-          images: searchedImages,
-        });
-      } catch (error) {}
+        if (searchedImages.length === 0) {
+          throw new Error();
+        }
+        this.setState(prevState => ({
+          images: [...prevState.images, ...searchedImages],
+        }));
+      } catch (err) { toast.error('Please reload this page!')
+      } finally {
+        this.setState({ loading: false, });
+      }
     }
   }
 
   handleSubmit = newQuery => {
     this.setState({
       query: newQuery,
+      page: 1,
+      images: [],
     });
   };
 
@@ -49,13 +70,15 @@ export class App extends Component {
   };
 
   render() {
-    const { query, images } = this.state;
+    const { error, images, loading } = this.state;
     return (
       <div>
         <SearchBar onSubmit={this.handleSubmit} />
+        {loading && <Loader />}
+        {error && <p>Oops! Something went wrong! Please reload this page!</p>}
         <ImageGallery images={images} />
-
-        <button></button>
+        <Button onClick={this.handleLoadMore} />
+        <Toaster />
       </div>
     );
   }

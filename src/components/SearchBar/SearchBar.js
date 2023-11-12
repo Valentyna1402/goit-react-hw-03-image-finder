@@ -3,7 +3,8 @@ return (
     <header>
     <form onSubmit={evt => {
 evt.preventDefault();
-handleSubmit(evt.target[1].value.toLowerCase())
+handleSubmit(evt.target[1].value.toLowerCase());
+evt.target[1].value = '';
 }}>
       <button type="submit">
         <span>Search</span>

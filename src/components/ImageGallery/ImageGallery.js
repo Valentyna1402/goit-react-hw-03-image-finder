@@ -8,7 +8,7 @@ export const ImageGallery = ({ images }) => {
         key={id}
         src={webformatURL}
         alt={tags}
-        largeImg={largeImageURL}
+        largeImageURL={largeImageURL}
         />;
       })}
     </ul>
