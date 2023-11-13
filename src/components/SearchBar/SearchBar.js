@@ -1,3 +1,5 @@
+import {BsSearch} from 'react-icons/bs'
+
 export const SearchBar = ({onSubmit: handleSubmit}) => {
 return (
     <header>
@@ -7,7 +9,7 @@ handleSubmit(evt.target[1].value.toLowerCase());
 evt.target[1].value = '';
 }}>
       <button type="submit">
-        <span>Search</span>
+      <BsSearch />
       </button>
   
       <input

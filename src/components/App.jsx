@@ -41,12 +41,13 @@ export class App extends Component {
         this.setState({ loading: true, error: false,});
         const searchedImages = await fetchImages(query, page);
         if (searchedImages.length === 0) {
-          throw new Error();
+          toast.error('Sorry, no more images available');
         }
         this.setState(prevState => ({
           images: [...prevState.images, ...searchedImages],
         }));
-      } catch (err) { toast.error('Please reload this page!')
+      } catch (err) { 
+        this.setState({ error: true, });
       } finally {
         this.setState({ loading: false, });
       }
@@ -77,7 +78,9 @@ export class App extends Component {
         {loading && <Loader />}
         {error && <p>Oops! Something went wrong! Please reload this page!</p>}
         <ImageGallery images={images} />
-        <Button onClick={this.handleLoadMore} />
+        {images.length > 0 && (
+          <Button onClick={this.handleLoadMore} />
+        )}
         <Toaster />
       </div>
     );
