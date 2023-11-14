@@ -18,10 +18,9 @@ export class App extends Component {
   };
 
   async componentDidMount() {
-    const { query, page } = this.state;
     try {
       this.setState({ loading: true, error: false });
-      const initialImages = await fetchImages('nature', page);
+      const initialImages = await fetchImages('nature', 1);
       this.setState({
         images: initialImages.hits,
       });
