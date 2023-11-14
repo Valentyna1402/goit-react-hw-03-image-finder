@@ -8,8 +8,9 @@ export const SearchBar = ({ onSubmit: handleSubmit }) => {
       <Form
         onSubmit={evt => {
           evt.preventDefault();
-          handleSubmit(evt.target[1].value.toLowerCase());
-          evt.target[1].value = '';
+          const query = evt.target.input.value;
+          handleSubmit(query.toLowerCase());
+          evt.target.reset();
         }}
       >
         <Button type="submit">
@@ -18,6 +19,7 @@ export const SearchBar = ({ onSubmit: handleSubmit }) => {
 
         <Field
           type="text"
+          name='input'
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"

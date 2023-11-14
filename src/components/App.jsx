@@ -21,7 +21,7 @@ export class App extends Component {
     const { query, page } = this.state;
     try {
       this.setState({ loading: true, error: false });
-      const initialImages = await fetchImages(query, page);
+      const initialImages = await fetchImages('nature', page);
       this.setState({
         images: initialImages.hits,
       });
@@ -72,9 +72,6 @@ export class App extends Component {
     });
   };
 
-  hideEl(el) {
-    el.classList.add('hidden');
-  }
 
   render() {
     const { error, images, loading, loadMore } = this.state;
